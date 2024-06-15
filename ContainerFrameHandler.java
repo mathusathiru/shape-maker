@@ -66,6 +66,9 @@ class ContainerFrameHandler implements ActionListener {
                 return;
             }
 
+            // Obtains fill status in ContainerPanel (if ticked, fill in shape with colour)
+            boolean filled = theFrame.fillCheckBox.isSelected();
+
             // Obtains selected colour from current point in ContainerPanel
             Color color = theFrame.selectedColor;
 
@@ -84,7 +87,7 @@ class ContainerFrameHandler implements ActionListener {
             }
 
             // Creates a new polygon with the validated parameters
-            RegPolygon polygon = new RegPolygon(sides, angle, radius, id, color);
+            RegPolygon polygon = new RegPolygon(sides, angle, radius, id, filled, color);
             // Adds the polygon to the list of polygons
             theFrame.getPolygonList().add(polygon);
             System.out.println("Polygon " + theFrame.idField.getText() + " successfully added to list");
