@@ -49,6 +49,9 @@ public class ContainerFrame extends JFrame {
 
     // Button for displaying polygons
     protected JButton displayButton;
+    
+    // Text area for displaying shape updates and information
+    protected JTextArea textArea;
 
     // ArrayList to store all created polygons
     private final ArrayList<RegPolygon> polygonList = new ArrayList<>();
@@ -184,9 +187,42 @@ public class ContainerFrame extends JFrame {
         gb.setConstraints(colourButton, gbc);
         inputPanel.add(colourButton, gbc);
 
+        // Create the main panel to hold the drawPanel and textPanel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbcMain = new GridBagConstraints();
 
         // Draw panel for displaying polygons
         JPanel drawPanel = new ContainerPanel(this);
+        gbcMain.gridx = 0;
+        gbcMain.gridy = 0;
+        gbcMain.weightx = 2.0;
+        gbcMain.weighty = 1.0;
+        gbcMain.fill = GridBagConstraints.BOTH;
+        mainPanel.add(drawPanel, gbcMain);
+
+        // Text area for displaying output of shape information, opening with a welcome message
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setMargin(new Insets(5, 5, 5, 5));
+        textArea.setText("Welcome to Polygon Drawing Tool!\n\n" +
+                        "- use the top bar menu to choose customised information for adding polygons\n" +
+                        "- use the bottom bar menu to add, search, sort and display polygons\n" +
+                        "- the command line displays all program activity, and displays polygons\n" +
+                        "- please note that all polygons will be deleted upon closing this window\n\n" +
+                        "Current Polygon: none; add a polygon\n"
+        );
+
+        // Add a scroll pane for the text area, to scroll up and down the text output
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(200, 200)); 
+
+        gbcMain.gridx = 1;
+        gbcMain.weightx = 1.0; 
+        gbcMain.fill = GridBagConstraints.BOTH;
+        mainPanel.add(scrollPane, gbcMain);
 
         /* Sets initial delay of ToolTipManager to 0 milliseconds, to eliminate any delay before showing tooltips, and
         ensures that tooltips are displayed immediately upon hovering over components */
@@ -236,26 +272,12 @@ public class ContainerFrame extends JFrame {
         // Add the input panel to the top of the frame
         add(inputPanel, BorderLayout.NORTH);
 
-        // Add the draw panel to centre of the frame
-        add(drawPanel, BorderLayout.CENTER);
+        // Add the main panel to the center of the frame
+        add(mainPanel, BorderLayout.CENTER);
 
         // Add the button panel to the bottom of the frame
         add(buttonPanel, BorderLayout.SOUTH);
 
-    }
-
-    // Displays welcome message dialog for the polygon drawing tool, with information about using the application
-    public void WelcomeMessage(ContainerFrame frame) {
-        JOptionPane.showMessageDialog(frame,
-                "Welcome to Polygon Drawing Tool!\n" +
-                        "- use the top bar menu to choose customised information for adding polygons\n" +
-                        "- use the bottom bar menu to add, search, sort and display polygons\n" +
-                        "- the command line displays all program activity, and displays polygons\n" +
-                        "- please note that all polygons will be deleted upon closing this window\n",
-                "Welcome to Polygon Drawing Tool", JOptionPane.INFORMATION_MESSAGE);
-
-        // Informs user that no polygons are currently displayed on the panel
-        System.out.println("Current Polygon: none; add a polygon\n");
     }
 
     // Retrieves the list of polygons stored in ContainerFrame
