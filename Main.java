@@ -13,8 +13,5 @@ public class Main {
         cFrame.setVisible(true);
         cFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Display welcome message
-        cFrame.WelcomeMessage(cFrame);
-
     }
 }
