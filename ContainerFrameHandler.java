@@ -72,27 +72,30 @@ class ContainerFrameHandler implements ActionListener {
             // Obtains selected colour from current point in ContainerPanel
             Color color = theFrame.selectedColor;
 
-            // Prints line of dashes for visual separation
-            System.out.println("-".repeat(150));
-            // Validation message for successfully validated polygon
-            System.out.println("Validation checks passed for polygon " + theFrame.idField.getText());
+            // Appends line of dashes for visual separation
+            theFrame.appendText("-".repeat(70));
+            // Validation message for successfully validated polygon, building a string
+            String validMessage = "";
+
+            validMessage += "Validation checks passed for polygon " + theFrame.idField.getText() + "\n";
 
             // Check if the color is not selected; if not, use default (black), otherwise, print the selected color
             if (color == null) {
                 color = Color.BLACK;
-                System.out.println("Default colour selected for polygon " + theFrame.idField.getText() + " (black)");
+                validMessage += "Default colour selected for polygon " + theFrame.idField.getText() + " (black)\n";
             } else {
-                System.out.println("Colour selected for polygon " + theFrame.idField.getText() + ": red("
-                        + color.getRed() + "), green(" + color.getRed() + "), " + "blue(" + color.getRed() + ")");
+                validMessage += "Colour selected for polygon " + theFrame.idField.getText() + ": red("
+                        + color.getRed() + "), green(" + color.getRed() + "), " + "blue(" + color.getRed() + ")\n";
             }
 
             // Creates a new polygon with the validated parameters
             RegPolygon polygon = new RegPolygon(sides, angle, radius, id, filled, color);
             // Adds the polygon to the list of polygons
             theFrame.getPolygonList().add(polygon);
-            System.out.println("Polygon " + theFrame.idField.getText() + " successfully added to list");
+            validMessage += "Polygon " + theFrame.idField.getText() + " successfully added to list";
+            theFrame.appendText(validMessage);
             // Prints a line of dashes for visual separation
-            System.out.println("-".repeat(150));
+            theFrame.appendText("-".repeat(70));
 
             // Sets selected polygon in the ContainerFrame to the newly added polygon
             theFrame.selectedPolygon = polygon;
@@ -100,7 +103,7 @@ class ContainerFrameHandler implements ActionListener {
             theFrame.repaint();
 
             // Prints a message indicating the currently displayed polygon
-            System.out.println("Current Polygon: " + theFrame.idField.getText() + "\n");
+            theFrame.appendText("Current Polygon: " + theFrame.idField.getText());
 
             // Clears text fields for the next input
             clearTextFields();
@@ -116,11 +119,11 @@ class ContainerFrameHandler implements ActionListener {
 
             // Checks if polygon list is empty
             if (polygonList.size() == 0) {
-                System.out.println("Polygon list is empty; cannot search for a polygon\n");
                 // Displays a message dialog indicating that there are no polygons to display
                 JOptionPane.showMessageDialog(null, "No polygons have been added\n" +
                                 "Add polygons first to enable search functionality",
                         "No Polygons", JOptionPane.INFORMATION_MESSAGE);
+                theFrame.appendText("Polygon list is empty; cannot search for a polygon");
             } else {
 
                 // Creates a text field for user input
@@ -203,28 +206,28 @@ class ContainerFrameHandler implements ActionListener {
 
             // Checks if the polygon list is empty
             if (polygonList.size() == 0) {
-                System.out.println("Polygon list is empty; no polygons to display\n");
                 // Displays a message dialog indicating that there are no polygons to display
                 JOptionPane.showMessageDialog(null, "No polygons to display",
                         "Display", JOptionPane.INFORMATION_MESSAGE);
+                theFrame.appendText("Polygon list is empty; no polygons to display");
             } else {
 
                 // Displays number of polygons that will be displayed
                 if (polygonList.size() == 1) {
-                    System.out.println("Displaying " + polygonList.size() + " polygon:\n");
+                    theFrame.appendText("Displaying " + polygonList.size() + " polygon:");
                 } else if (polygonList.size() > 1) {
-                    System.out.println("Displaying " + polygonList.size() + " polygons:\n");
+                    theFrame.appendText("Displaying " + polygonList.size() + " polygons:");
                 }
 
                 // Iterate through polygon list and display details of each one in the command line
                 for (int i = 0; i < polygonList.size(); i++) {
                     RegPolygon p = polygonList.get(i);
-                    System.out.println(p);
+                    theFrame.appendText(String.valueOf(p));
 
                     // If not the last polygon, print a line of dashes to separate polygons and their information
                     if (i < polygonList.size() - 1) {
                         String dash = "-";
-                        System.out.println(dash.repeat(150));
+                        theFrame.appendText(dash.repeat(100));
                     } else {
                         System.out.println();
                     }
@@ -268,13 +271,12 @@ class ContainerFrameHandler implements ActionListener {
         // Checks if input ID already exists in the list of polygons
         for (RegPolygon p : polygonList) {
             if (p.getID() == id) {
-                System.out.println("Error: ID " + theFrame.idField.getText() +  "already exists in the polygon list\n");
                 // Display an error message for duplicate ID
                 JOptionPane.showMessageDialog(null, "ID " + theFrame.idField.getText() +
                         " already exists\nUse a new ID value","Duplicate ID", JOptionPane.ERROR_MESSAGE);
-
                 // Clears ID field for input of a new polygon ID
                 inputHandler.clearIDField();
+                theFrame.appendText("Error: ID " + theFrame.idField.getText() +  "already exists in the polygon list");
                 return -1;
             }
         }
@@ -293,25 +295,24 @@ class ContainerFrameHandler implements ActionListener {
         // Validates input ID, returns an empty panel if not
         int id = inputHandler.validateSearchIDInput(searchId);
         if (id == -1) {
-            System.out.println("Current Polygon: none - add or search for a polygon\n");
+            theFrame.appendText("Current Polygon: none - add or search for a polygon");
             return null;
         }
 
         // Search for the polygon with the provided ID
         for (RegPolygon p : theFrame.getPolygonList()) {
             if (p.getID() == id) {
-                System.out.println("Polygon " + searchId + " successfully retrieved\n");
-                System.out.println("Current Polygon: " + searchId + "\n");
+                theFrame.appendText(("Polygon " + searchId + " successfully retrieved"));
+                theFrame.appendText(("Current Polygon: " + searchId));
                 return p;
             }
         }
 
         // Displays an error message if the polygon with the ID is not found
-        System.out.println("Error: ID " + searchId +  " was not found in the polygon list\n");
         JOptionPane.showMessageDialog(null, "No polygon found with ID: " + searchId,
                 "ID Not Found", JOptionPane.ERROR_MESSAGE);
-        System.out.println("Current Polygon: none - add or search for a polygon\n");
-
+        theFrame.appendText("Error: ID " + searchId +  " was not found in the polygon list");
+        theFrame.appendText("Current Polygon: none - add or search for a polygon");
         return null;
     }
 
@@ -323,20 +324,20 @@ class ContainerFrameHandler implements ActionListener {
 
         if (numPolygons == 0) {
             // Display a message if there are no polygons to sort
-            System.out.println("No polygons to sort (empty polygon list)\n");
             JOptionPane.showMessageDialog(null, "There are no polygons to sort",
                     "No Polygons", JOptionPane.INFORMATION_MESSAGE);
+            theFrame.appendText("No polygons to sort (empty polygon list)");
         } else if (numPolygons == 1) {
-            System.out.println("1 polygon in polygon list; no need for sorting\n");
             // Display a message if only one polygon is present, which does not need sorting
             JOptionPane.showMessageDialog(null, "There is 1 polygon present, so there is " +
                             "no need for sorting",
                     "1 Polygon Sorted", JOptionPane.INFORMATION_MESSAGE);
+            theFrame.appendText("1 polygon in polygon list; no need for sorting");
         } else {
-            System.out.println(numPolygons + " polygons sorted\n");
             // Display a message indicating the number of polygons sorted (more than 1)
             JOptionPane.showMessageDialog(null, numPolygons + " polygons sorted",
                     "Polygons Sorted", JOptionPane.INFORMATION_MESSAGE);
+            theFrame.appendText(numPolygons + " polygons sorted");
         }
     }
 
