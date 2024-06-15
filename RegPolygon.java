@@ -29,6 +29,9 @@ public class RegPolygon implements Comparable<RegPolygon> {
     // Y-coordinate of polygon centre
     private int polyCenY;
 
+    // Field to store the fill option
+    private boolean filled;
+
     // Array to store X-coordinates of polygon vertices
     private double[] pointsX;
 
@@ -36,12 +39,13 @@ public class RegPolygon implements Comparable<RegPolygon> {
     private double[] pointsY;
 
     /* Constructor for creating RegPolygon object. */
-    public RegPolygon(int sides, double startingAngle, double radius, int id, Color color) {
+    public RegPolygon(int sides, double startingAngle, double radius, int id, boolean filled, Color color) {
         this.pSides = sides;
         this.pStartingAngle = startingAngle;
         this.pRadius = radius;
         this.pColor = color;
         this.pId = id;
+        this.filled = filled;
         pointsX = new double[pSides];
         pointsY = new double[pSides];
     }
@@ -84,8 +88,17 @@ public class RegPolygon implements Comparable<RegPolygon> {
     public void drawPolygon(Graphics2D g, Dimension d) {
         // Sets drawing color to polygon outline colour
         g.setColor(pColor);
-        // Draws polygon on the Graphics2D object using the calculated vertices
-        g.drawPolygon(getPolygonPoints(d));
+
+        // Calculate polygon points
+        Polygon polygonPoints = getPolygonPoints(d);
+
+        // Fill the polygon if the filled option is selected
+        if (filled) {
+            g.fillPolygon(polygonPoints);
+        }
+
+        // Draw the polygon outline
+        g.drawPolygon(polygonPoints);
     }
 
     /* Gets polygon ID */
