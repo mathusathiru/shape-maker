@@ -286,4 +286,9 @@ public class ContainerFrame extends JFrame {
         return polygonList;
     }
 
+    // Appends text to the textArea, for output of shape updates, with a new line
+    public void appendText(String text) {
+        textArea.append("\n" + text + "\n");
+    }
+
 }
