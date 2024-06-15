@@ -32,6 +32,9 @@ public class ContainerFrame extends JFrame {
     // Text field for entering the ID of a polygon
     protected JTextField idField;
 
+    // Checkbox for selecting fill option
+    protected JCheckBox fillCheckBox;
+
     // Button for adding a new polygon
     protected JButton addPolygon;
 
@@ -139,6 +142,18 @@ public class ContainerFrame extends JFrame {
         gbc.insets = new Insets(5, 0, 5, 20);
         gb.setConstraints(radiusField, gbc);
         inputPanel.add(radiusField, gbc);
+
+        // Create a JLabel for the fill text
+        JLabel fillLabel = new JLabel("Fill:");
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gb.setConstraints(fillLabel, gbc);
+        inputPanel.add(fillLabel, gbc);
+
+        // Create a JCheckBox for selecting fill option
+        fillCheckBox = new JCheckBox();
+        gbc.insets = new Insets(5, 0, 5, 20);
+        gb.setConstraints(fillCheckBox, gbc);
+        inputPanel.add(fillCheckBox, gbc);
 
         // Creates JLabel for radius, aligns text left and adds spacing and constraints, add to inputPanel
         JLabel colorLabel = new JLabel("Colour:");
